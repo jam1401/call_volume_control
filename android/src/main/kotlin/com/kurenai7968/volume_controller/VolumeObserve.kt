@@ -23,15 +23,15 @@ class VolumeObserver(private val context:Context){
         if (volume < 0) {
             volumePercentage = 0.0
         }
-        var maxVolume:Int = audioManager.getStreamMaxVolume(0)
+        var maxVolume:Int = audioManager.getStreamMaxVolume(6)
         _volume = (round(volumePercentage * maxVolume)).toInt()
 
-        audioManager.setStreamVolume(0, _volume, if (showSystemUI) FLAG_SHOW_UI else 0)
+        audioManager.setStreamVolume(6, _volume, if (showSystemUI) FLAG_SHOW_UI else 0)
     }
 
     fun getVolume():Double {
-        var currentVolume:Int = audioManager.getStreamVolume(0)
-        var maxVolume:Int = audioManager.getStreamMaxVolume(0)
+        var currentVolume:Int = audioManager.getStreamVolume(6)
+        var maxVolume:Int = audioManager.getStreamMaxVolume(6)
         return round((currentVolume / maxVolume.toDouble()) * 10000) / 10000
     }
 }
@@ -63,8 +63,8 @@ class VolumeListener(private val context: Context): EventChannel.StreamHandler {
     }
 
     private fun volume():Double {
-        var currentVolume:Int = audioManager.getStreamVolume(0)
-        var maxVolume:Int = audioManager.getStreamMaxVolume(0)
+        var currentVolume:Int = audioManager.getStreamVolume(6)
+        var maxVolume:Int = audioManager.getStreamMaxVolume(6)
         return round((currentVolume / maxVolume.toDouble()) * 10000) / 10000
     }
 }
@@ -76,8 +76,8 @@ class VolumeBroadcastReceiver(private val events: EventChannel.EventSink?): Broa
     private var maxVolume:Int = 0
     override fun onReceive(context: Context, intent: Intent?) {
         audioManager= context!!.getSystemService(AUDIO_SERVICE) as AudioManager;
-        currentVolume = audioManager.getStreamVolume(0)
-        maxVolume = audioManager.getStreamMaxVolume(0)
+        currentVolume = audioManager.getStreamVolume(6)
+        maxVolume = audioManager.getStreamMaxVolume(6)
         volumePercentage = round((currentVolume / maxVolume.toDouble()) * 10000) / 10000
         events?.success(volumePercentage)
     }
